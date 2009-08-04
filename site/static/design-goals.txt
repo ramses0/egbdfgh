@@ -1,0 +1,82 @@
+Music like Mutopia
+  - Lilypond format
+  - High quality
+  - Various types of music (guitar, piano, vocal)
+
+Editable like Wikipedia
+  - Backed by Git
+  - Full version history
+  - Any user can edit (possible / probable have an anonymous edit pool)
+  - Registered user can "sponsor in" anonymous edits
+  - Steal bio's per composer from Wikipedia
+  - Potentially host per-song information (like: http://www.geocities.com/zio_tom78/music.html )[below]
+
+Discussion like Delcamp
+  - Simple discussion, but per song, per video, or in general
+  - Good moderation / edit / banhammer stuff (to keep positive tone)
+  - ...but sortable!
+
+Video upload like YouTube
+  - upload, transcode
+  - view online, view on ipod
+  - subscribe to rss per user, per song
+  - subscribe to itunes rss
+
+Open like Linux
+  - reproduceable software
+  - debian packages (apt-get install *dependencies* the-software-master)
+  - GIT storage of data + code
+  - Fall to OpenID for identity
+
+Scale like GAE / EC2
+  - mostly for videos... fetch, store, transcode, etc.
+  - probable working-set of origin data is one node (ie *.ly files)
+  - probable comments / videos / etc should scale wide
+  - comments => sharding
+  - videos => wide storage, wide compute (ffmpeg)
+  - ...or defer to youtube short / long term
+
+RSS/Podcast/Vidcast to iTunes
+  - subscribe to this user
+  - this song
+  - min # ratings, min rating
+
+Ratings / Recommendations like Netflix
+  - rate this song
+  - people who liked this song also liked this one
+  - add this song to my queue / book list
+
+Bookmark songs like Delicious
+  - I like "this song"
+  - add song to my favorites
+  - add song to my book #1 or #2
+  - bookmark "this other public book / list"
+
+Scorekeeping like Rock Band
+  - Your rating for this song:          * * * O O
+  - Average rating for this song:       * * * * O
+  - Your best rated video performance:  * * * O O
+  - Your best rated live performance:   * * O O O
+
+
+
+
+
+
+
+
+
+[below]: String Quartet K. 387 in G (December 1782)
+
+Among the six quartets in Op. X, this is the one which has the greatest number of dynamic changes. The clearest example comes in the Minuetto (bars 3-9): Violin I and Cello play a chromatic scale where each note has its own dynamic indication.
+
+The first movement shows a witty attitude to avoid literal repeats. Take for instance the second theme (bars 25 ff.): when Violin II plays it for the first time (piano), the harmonization is I-IV^6_4 etc. But when Violin II repeats it forte (bars 31 ff.), the harmonization becomes I-V^4_2 etc. Other examples are found when comparing the exposition with the recapitulation (some examples: bar 109 against bar 2, bar 111 against bar 4).
+
+The Minuetto is the longest of Opus X (it lasts more than eight minutes) and its main theme exhibits an unusual chromatic ascending scale (Violin I) followed by a descending scale (Cello). The Trio is dramatic and powerful.
+
+The third movement, Andante cantabile, seems sometimes to be a concert aria for Violin and orchestra. There is a vivid sense of drama in this marvellous piece (see e.g. bars 26-30 and the beautiful theme which follows) which shows the great talent of Mozart in writing music for strings.
+
+What to say about the last movement (Molto Allegro)? This masterpiece would be unique in Mozart's production if we forget the Molto Allegro of the Jupiter symphony. The skeleton of this piece is based on a classical sonata form, but everything is grounded on a masterly use of counterpoint: both the first (bars 1 ff.) and the second theme (bars 52 ff.) are played like fugues (note how the second theme slowly fades away and the first theme takes place starting from bar 69). There are even some "divertimenti", but these are written in a clear classical style rather than baroque, with quick scales and witty ideas (see e.g. bars 18 ff., bars 92 ff. etc.). Note in bar 124 the presence of a chromatic scale similar to the one heard in the Minuetto.
+
+The last surprise comes at the end of the last movement: after a powerful coda and a classical cadenza IV-V-I (bar 290) in forte, Mozart plays once again the main theme piano and closes the piece with a trill.
+
