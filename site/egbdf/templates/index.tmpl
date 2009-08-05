@@ -1,9 +1,16 @@
-#encoding UTF-8
+$def with ( lang=None, langs=[ 'fr', 'it', 'en', 'es', 'pt', 'ja', 'de', 'nl', 'ru', 'zh', 'pl',], base_host="egbdf.us:8080" )
 <html>
 <head><title>$_('EGBDF.us - Musicians Wanted')</title></head>
 <body>
 <h1>$_("Hello World!")</h1>
-<p>$_("This is a test of internationalized crap with Cheetah Templates!")</p>
+<p>$_("This is a test of internationalized crap with Templator Templates!")</p>
+<p>$_("You are using %s locale." % lang ) </p>
+
+- 
+$for c in langs
+	<a href="http://${c}.${base_host}/">$c</a> -
+
+
 <ul>
 <li>$_("FR - Partitions pour guitare classique")</li>
 <li>$_("IT - Spartiti per chitarra classica")</li>

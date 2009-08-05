@@ -1,12 +1,8 @@
 import web, sys, markdown, gettext
 gettext.install( "NONE" )
-#sys.path.append( "./egbdf" )
-#print sys.path
-import egbdf.templates.index
-import egbdf.templates.song
 
-def _( s ):
-	return "TRANSLATED('" + s + "')"
+#def _( s ):
+#	return "TRANSLATED('" + s + "')"
 
 # so that sessions work, but can't hot-reload
 #web.config.debug = False
@@ -32,13 +28,18 @@ def custom500():
 class song:
 	def GET( self, instrument, composer, song ):
 		web.header( "Content-Type", "text/html; charset=utf-8" )
-		return egbdf.templates.song.song( instrument, composer, song )
-		#return _("Hello World!") + "<br>INS: " + instrument + "<br>COMP: " + composer + "<br>SONG: " + song
+		host = web.ctx.env['HTTP_HOST']
+		lang = host.split('.')[0]
+		render = web.template.render( 'egbdf/templates', globals={'_': _} )
+		return render.song( lang=lang, instrument=instrument, composer=composer, song=song )
 
 class index:
 	def GET( self ):
 		web.header( "Content-Type", "text/html; charset=utf-8" )
-		return egbdf.templates.index.index()
+		host = web.ctx.env['HTTP_HOST']
+		lang = host.split('.')[0]
+		render = web.template.render( 'egbdf/templates', globals={'_': _} )
+		return render.index( lang=lang )
 
 app = web.application( urls, globals() )
 app.notfound = custom404
