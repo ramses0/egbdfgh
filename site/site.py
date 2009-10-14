@@ -1,8 +1,8 @@
 import web, sys, markdown, gettext
-gettext.install( "NONE" )
+gettext.install( "NONE", "" )
 
-#def _( s ):
-#	return "TRANSLATED('" + s + "')"
+def _( s ):
+	return "TRANSLATED('" + s + "')"
 
 # so that sessions work, but can't hot-reload
 #web.config.debug = False
@@ -25,21 +25,34 @@ def custom500():
 #		f = open( "./static/" + filename + ".txt" )
 #		return markdown.markdown( "marked-down " + filename )
 
-class song:
-	def GET( self, instrument, composer, song ):
-		web.header( "Content-Type", "text/html; charset=utf-8" )
-		host = web.ctx.env['HTTP_HOST']
-		lang = host.split('.')[0]
-		render = web.template.render( 'egbdf/templates', globals={'_': _} )
-		return render.song( lang=lang, instrument=instrument, composer=composer, song=song )
-
-class index:
+class page:
 	def GET( self ):
+		print "ABCDEFG"
+		self.globals = {
+				'_': _
+		}
 		web.header( "Content-Type", "text/html; charset=utf-8" )
 		host = web.ctx.env['HTTP_HOST']
-		lang = host.split('.')[0]
-		render = web.template.render( 'egbdf/templates', globals={'_': _} )
-		return render.index( lang=lang )
+		self.lang = host.split('.')[0]
+		
+
+class song( page ):
+	def GET( self, instrument, composer, song ):
+		# super
+		page.GET( self )
+		render = web.template.render( 'egbdf/templates', self.globals )
+		return render.song( lang=self.lang, instrument=instrument, composer=composer, song=song )
+
+class index( page ):
+	def abc( self, a):
+		return "abc"
+	def GET( self ):
+		# super
+		page.GET( self )
+		print self.globals
+		print self.lang
+		render = web.template.render( 'egbdf/templates', globals=self.globals )
+		return render.index( lang=self.lang )
 
 app = web.application( urls, globals() )
 app.notfound = custom404
