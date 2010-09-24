@@ -1,0 +1,198 @@
+Supported Graphics Formats
+--------------------------
+Anything PIL: BMP GIF JPEG PNG TIFF XBM
+Also: PDF (special!)
+
+FILE_ATOM:
+ - individual file in PIL or PDF formats
+
+FILE_GROUP:
+ - collection of FILE_ATOMs or a single / multi-page PDF
+ - ZIP, PDF, directory in a zip
+ - a FILE_GROUP of one is automatically collapsed into a FILE_ATOM
+ _ (this handles the base case of a single page PDF fine)
+
+
+[Upload!]
+---------
+  - to upload.egbdf.us
+  - under a username (egbdf-uploads/user-1234/0001.zip, 0002.jpg, 0003.pdf)
+  - sent into a work-queue
+  - files are inspected for type / virus?
+  - decomposed into atoms + groups
+  - 
+
+
+
+Atomizing Upload Events
+-----------------------
+
+Future Consideration:
+    Multi-Input file uploads (ie: foo.jpg, bar.jpg ... foo.jpg, bar.zip)
+
+Rules:
+    * single files go into an unnamed group
+    * pdfs always get converted to single files as if they were in a directory named after their pdf
+    * if there is ANY specific group, non-grouped files go into a different "unnamed group"
+    * if there are no specific groups, all files go into a group named after the zip
+
+Pseudocode:
+    ./atomize.py --help
+    usage: atomize.py [uploaded_file] [temporary_directory] [username]
+
+    ./atomize.py bare-jpg.ext `tempfile` rames --verbose
+    Extracting into working directory: /tmp/rames-NsicQ0
+    file --mime-type bare-jpg.ext: image/jpeg
+    Searching for groups...
+    ...done.
+    Copying bare image/*...
+      * bare-jpg.ext: /tmp/rames-NsicQ0/unnamed_group/bare-jpg.ext
+    ...done!
+    
+    ./atomize.py some-file.ext `tempfile` rames --verbose
+    Extracting into working directory: /tmp/rames-NsicQ0
+    file --mime-type some-file.ext: application/pdf
+    Searching for groups...
+      * Implicit group: some-file.ext (application/pdf)
+    ...done.
+    Atomizing bare PDF...
+      * some-file.ext: /tmp/rames-NsicQ0/some-file/1.pdf
+      * some-file.ext: /tmp/rames-NsicQ0/some-file/2.pdf
+      * some-file.ext: /tmp/rames-NsicQ0/some-file/3.pdf
+    ...done!
+
+    ./atomize.py unknown-zip.ext `tempfile` rames --verbose
+    Extracting into working directory: /tmp/rames-NsicQ0
+    file --mime-type unknown-zip.ext: application/zip
+    Searching for groups...
+      * Implicit group: unknown-zip.ext (application/zip)
+      * Implicit group: foo3.ext (application/pdf)
+    ...done.
+    Atomizing Zip...
+      * /tmp/rames-NsicQ0/foo1.ext: image/jpeg (marking to copy)
+      * /tmp/rames-NsicQ0/foo2.ext: image/jpeg (marking to copy)
+      * /tmp/rames-NsicQ0/foo3.ext: application/pdf (marking to atomize)
+      * /tmp/rames-NsicQ0/foo4.ext: application/zip (marking to ignore)
+      Sub-Atoms Found!
+      Sub-Atomizing /tmp/rames-NsicQ0/foo3.ext...
+        * some-file.ext: /tmp/rames-NsicQ0/foo3/1.pdf
+        * some-file.ext: /tmp/rames-NsicQ0/foo3/2.pdf
+        * some-file.ext: /tmp/rames-NsicQ0/foo3/3.pdf
+      ...done.
+      Removing non-atom files:
+        * /tmp/rames-NsicQ0/foo3.ext: application/pdf
+        * /tmp/rames-NsicQ0/foo4.ext: application/pdf
+      ...done.
+      Copying atoms:
+        * foo1.ext: /tmp/rames-NsicQ0/unnamed_group/foo1.ext
+        * foo2.ext: /tmp/rames-NsicQ0/unnamed_group/foo2.ext
+      ...done.
+    ...done!
+
+    ./atomize.py unknown-zip.ext `tempfile` rames --verbose
+    Extracting into working directory: /tmp/rames-NsicQ0
+    file --mime-type unknown-zip.ext: application/zip
+    Searching for groups...
+      * Implicit group: unknown-zip.ext (application/zip)
+      * Explicit group: somedir (directory)
+    ...done.
+    Atomizing Zip...
+      * /tmp/rames-NsicQ0/somedir/foo1.ext: image/jpeg (marking to copy)
+      * /tmp/rames-NsicQ0/somedir/foo2.ext: image/jpeg (marking to copy)
+      Copying atoms:
+        * foo1.ext: /tmp/rames-NsicQ0/somedir/foo1.ext
+        * foo2.ext: /tmp/rames-NsicQ0/somedir/foo2.ext
+      ...done.
+    ...done!
+
+
+    image_types = [ 'jpg', 'png', 'tif' ]
+    if 1 == count( upload_event.files() ) and upload_event.files()[1].type in image_types:
+        s3.put( user.name()
+                + "/" + user.next_unnamed_group()
+                + "/" + upload_event.files()[1].name(),
+                upload_event.files()[1].content() )
+    else:
+
+
+Given user rames uploading:
+
+    UploadEvent:
+        foo.jpg => rames/unnamed_group_1/foo.jpg
+    
+
+    UploadEvent:
+        foo.pdf => rames/foo/1.pdf
+                => rames/foo/2.pdf
+                => rames/foo/3.pdf
+    
+    UploadEvent:
+        foo.zip   => rames/unnamed_group_2/aaa.png
+          aaa.png => rames/unnamed_group_2/bbb.png
+          bbb.png => rames/ccc/1.pdf
+          ccc.pdf => rames/ccc/2.pdf
+                  => rames/ccc/3.pdf
+    
+    UploadEvent:
+        foo.zip       => rames/aaa/bbb.png
+          aaa/bbb.png => rames/aaa/ccc.png
+          aaa/ccc.png => rames/unnamed_group_3/ddd.png
+          ddd.png     => rames/eee/1.pdf
+          eee.pdf     => rames/eee/2.pdf
+                      => rames/eee/3.pdf
+    
+    UploadEvent:
+        foo.zip       => rames/aaa/bbb.png
+          aaa/bbb.png => rames/aaa/ccc.png
+          aaa/ccc.png => rames/unnamed_group_4/ddd.png
+          ddd.png     => rames/eee/1.pdf
+          eee.pdf     => rames/eee/2.pdf
+                      => rames/eee/3.pdf
+    
+    UploadEvent:
+        foo.zip       => rames/aaa/bbb.png
+          aaa/bbb.png => rames/aaa/ccc.png
+          aaa/ccc.png => rames/unnamed_group_4/ddd.png
+          aaa/ddd.zip => rames/eee/1.pdf 
+          ddd.png     => rames/eee/2.pdf
+          eee.pdf     => rames/eee/3.pdf
+          xxx.zip     => __unprocessed_path__ => xxx.zip
+                      => __unprocessed_path__ => aaa/ddd.zip
+    
+    UploadEvent:
+        foo.zip       => rames/aaa/bbb.png
+          aaa/bbb.png => rames/aaa/ccc.png
+          aaa/ccc.png => rames/bbb/xxx.jpg
+          bbb/xxx.jpg => rames/bbb/1.pdf 
+          bbb/yyy.pdf => rames/bbb/2.pdf 
+          ddd.png     => rames/bbb/3.pdf
+          eee.pdf     => rames/unnamed_group_5/ddd.png
+                      => rames/unnamed_group_5/1.pdf
+                      => rames/unnamed_group_5/2.pdf
+                      => rames/unnamed_group_5/3.pdf
+
+
+Upload Event
+
+
+
+unzip -j -d ./output-test/ swfupload_s3.zip swfupload_s3/XPButtonUploadText_61x22.png
+
+unzip -qql swfupload_s3.zip | grep -v '^\s*0' | grep -v __MAC | grep -v DS_Store | awk -- '{print }'
+
+
+http://www.pdflabs.com/docs/pdftk-cli-examples/
+
+Burst a Single PDF Document into Single Pages and Report its Data to doc_data.txt
+    pdftk mydoc.pdf burst
+    ...the PDF pages are named e.g.: pg_0001.pdf, pg_0002.pdf, etc.
+
+Merge Two or More PDFs into a New Document
+    pdftk 1.pdf 2.pdf 3.pdf cat output 123.pdf
+
+
+pdfjam???
+
+??? gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile=output.pdf input.pdf
+
+??? convert -page A4 -compress jpeg your_image.jpg output.pdf
