@@ -1,0 +1,69 @@
+[core]
+    logallrefupdates = true
+    ignorecase = true
+    autocrlf = false
+    pager = cat
+[gui]
+    wmstate = zoomed
+    geometry = 876x451+249+102 194 203
+[alias]
+    # synonyms and shortcuts
+    wc = whatchanged
+    st = status
+    stat = status
+    branches =  branch
+    switch = checkout
+
+    # list files affected by a sha-1
+    # Usage:  git files ff1234 => [M] Foo.txt, [A] Bar.txt
+    files = "!f() { git diff --name-status $1^ $1; }; f"
+
+    # retire a branch (prepend "zzz-" to the name)
+    # Usage: git retire rames-feature-foo
+    retire = "!g() { git branch -m $1 zzz-$1; }; g"
+
+    # make sure the "master" branch is up to date with remotes/trunk
+    # Usage: git remaster (when not on branch "master")
+    remaster = "!h() { git svn fetch ; git branch -d master ; git checkout -b master remotes/trunk;  }; h"
+
+    # throw away file contents from working directory and revert to history
+    # Usage: git junk foo.txt => foo.txt is reset to before editing state
+    junk = checkout --
+
+    # useful options for investigating commits from multiple branches
+    # Usage: git history remotes/v_1.2.3 remotes/v_1.2.4 ... see commit log interspersed for both
+    history = show-branch --more=3 --date-order
+
+    # useful options for investigating commits from multiple branches
+    # Usage: git history remotes/v_1.2.3 remotes/v_1.2.4 ... see commit log interspersed for both
+    feature = "!i() { git checkout rames-feature-$1 ; }; i"
+
+
+    # better preview of "git svn dcommit -n" including log messages and file modification status for each commit
+    # Usage: git changes => when on a branch that is downstream from an SVN branch
+    changes = "!j() { git svn dcommit -n | awk -- 'FNR > 1 {print $3}' | xargs -n 1 -I{} bash -c 'git log --oneline {}~1..{} && git diff --name-status {}^ {}'; git status | head -1 ; git svn dcommit -n | head -1 ; }; j"
+
+
+    # don't show branches with "zzz" in them (retired branches)
+    # Usage: git br
+    br =  "!f() { git branch | grep -v zzz | grep -v '\\*'; }; f"
+
+    # show "bug-like" commits in the last two weeks
+    # Usage: git bugs
+    bugs = "!f() { git log --since='2 weeks ago' --pretty=format:'%Cgreen%h%Creset %Cred%an%Creset %s%n'  --color | grep 'bug\\|bugs'; }; f"
+
+    # show oneline commits in last two weeks, but also include author information
+    # Usage: git oneline
+    oneline = "!f() { git log --since='2 weeks ago' --pretty=format:'%Cgreen%h%Creset %Cred%an%Creset %s'  --color; }; f"
+
+    # [G]it.[R]ecently.[A]dded.[F]iles (graf)
+    # Usage: git graf
+    graf = "!f() { git diff --name-status `git log --since='2 weeks ago' --pretty=format:'%H' | tail -1 ` HEAD | grep ^A ; }; f"
+
+
+[color]
+    ui = auto
+[user]
+    name = Robert Ames
+    email = ramses0@yahoo.com
+
