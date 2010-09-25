@@ -3,6 +3,7 @@
     ignorecase = true
     autocrlf = false
     pager = cat
+    editor = vim
 [gui]
     wmstate = zoomed
     geometry = 876x451+249+102 194 203
