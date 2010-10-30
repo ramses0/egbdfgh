@@ -1,7 +1,8 @@
 Music like Mutopia
-  - Lilypond format
-  - High quality
-  - Various types of music (guitar, piano, vocal)
+  - Support Lilypond format (eventually)
+  - Definitely support arbitrary PDF / *.txt / *.jpg upload
+  - Public stuff should be high quality
+  - Private uploads are less important
 
 Editable like Wikipedia
   - Backed by Git
