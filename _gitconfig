@@ -49,6 +49,10 @@
     # Usage: git br
     br =  "!f() { git branch | grep -v zzz | grep -v '\\*'; }; f"
 
+    # Usage: git rb
+    # show only remote branches (remotes/*...)
+    rb =  "!f() { git branch -a | grep '^  remote' | grep -v '\\*'; }; f"
+
     # show "bug-like" commits in the last two weeks
     # Usage: git bugs
     bugs = "!f() { git log --since='2 weeks ago' --pretty=format:'%Cgreen%h%Creset %Cred%an%Creset %s%n'  --color | grep 'bug\\|bugs'; }; f"
@@ -61,6 +65,17 @@
     # Usage: git graf
     graf = "!f() { git diff --name-status `git log --since='2 weeks ago' --pretty=format:'%H' | tail -1 ` HEAD | grep ^A ; }; f"
 
+    # Usage: git blamestat [file]
+    # Who recently changed lines in a file and when they were changed
+    blamestat = "!f() { echo Blaming $1: ; echo '' > /tmp/out-dates.txt ; git blame -f $1 | awk -- '{print $4}' | sort | uniq -c >> /tmp/out-dates.txt ; echo '' > /tmp/out-people.txt ; git blame -f $1 | awk -- '{print $3}' | sed 's/(//g' | sort | uniq -c | sort -n >> /tmp/out-people.txt ; paste /tmp/out-dates.txt /tmp/out-people.txt ; rm /tmp/out-dates.txt /tmp/out-people.txt ; }; f"
+
+    # Usage: git cross [commit-id]
+    # cherry-pick the commit-id to the current branch with a default "merge" message
+    cross = "!f() { git cherry-pick -n $1 ; M=`git show $1 | grep git-svn-id | sed -e 's/^.*ssh//g' -e 's/^.*\\///g' -e 's/\\ .*$//g' -e 's/@/ @ /g'`; N=`git show $1 --pretty=format:%s | head -1`; J=\"merge $M =\\> $N\"; git commit -e -m \"$J\"; }; f"
+
+    # Usage: git alias
+    # show local aliases
+    alias = "!f() { cat ~/.gitconfig | grep -A1 '[U]sage:' | sed 's/^.*[U]sage:/>>>/g' | sed 's/^--//g' ; }; f"
 
 [color]
     ui = auto
