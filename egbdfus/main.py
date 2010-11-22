@@ -25,8 +25,8 @@ from google.appengine.ext.webapp import util
 
 class BaseHandler( webapp.RequestHandler ):
     def get( self ):
-        self.API_KEY = '0eda365a1ca6aa048b65467aae47e520'
-        self.SECRET_KEY = 'eccef02b91732d24f7cdf37dfded3751'
+        self.API_KEY = '...'
+        self.SECRET_KEY = '...'
         self.facebookapi = facebook.Facebook( self.API_KEY, self.SECRET_KEY )
 
         if not self.facebookapi.check_connect_session( self.request ):
@@ -62,9 +62,16 @@ class MainHandler( BaseHandler ):
 
         self.tpl( 'index.html', template_values )
 
+class FooHandler(webapp.RequestHandler):
+    def get(self):
+        self.response.out.write('Hello foo!')
+
+
 def main():
-    application = webapp.WSGIApplication([('/', MainHandler)],
-                                         debug=True)
+    application = webapp.WSGIApplication([
+        ('/', MainHandler),
+        ('/foo', FooHandler)
+    ], debug=True)
     util.run_wsgi_app(application)
 
 
