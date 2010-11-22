@@ -16,8 +16,8 @@
 
 """A barebones AppEngine application that uses Facebook for login."""
 
-FACEBOOK_APP_ID = "0eda365a1ca6aa048b65467aae47e520"
-FACEBOOK_APP_SECRET = "eccef02b91732d24f7cdf37dfded3751"
+FACEBOOK_APP_ID = "..."
+FACEBOOK_APP_SECRET = "..."
 
 import facebook
 import os.path
