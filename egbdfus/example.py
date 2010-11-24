@@ -23,6 +23,7 @@ import facebook
 import os.path
 import wsgiref.handlers
 
+from google.appengine.ext import blobstore
 from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
@@ -79,9 +80,26 @@ class HomeHandler(BaseHandler):
                     facebook_app_id=FACEBOOK_APP_ID)
         self.response.out.write(template.render(path, args))
 
+class UploadHandler(BaseHandler):
+    def get(self):
+        path = os.path.join(os.path.dirname(__file__), "upload.html")
+#        args = dict(current_user=self.current_user,
+#                    facebook_app_id=FACEBOOK_APP_ID)
+        args = dict( blah={
+            'foo': 1,
+            'bar': 2,
+            'ulurl':  blobstore.create_upload_url('/upload')
+        } )
+        self.response.out.write(template.render(path, args))
+
 
 def main():
-    util.run_wsgi_app(webapp.WSGIApplication([(r"/", HomeHandler)]))
+    util.run_wsgi_app(webapp.WSGIApplication(
+        [
+            (r"/", HomeHandler),
+            (r"/upload", UploadHandler)
+        ]
+    ))
 
 
 if __name__ == "__main__":
