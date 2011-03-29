@@ -4,6 +4,11 @@ runtime: python
 api_version: 1
 
 handlers:
+- url: /prefs
+  script: prefs.py
+  login: required
+
 - url: /.*
   script: main.py
+
 
