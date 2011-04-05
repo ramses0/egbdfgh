@@ -1,11 +1,15 @@
 from google.appengine.api import users
+from google.appengine.api import quota
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 import datetime
 import models
+import os
+
 
 class MainPage( webapp.RequestHandler ):
 	def get( self ):
+		foo = quota.get_request_cpu_usage()
 		time = datetime.datetime.now()
 		user = users.get_current_user()
 
@@ -27,10 +31,19 @@ class MainPage( webapp.RequestHandler ):
 				<input type="submit" value="Set!" />
 			</form>
 			""" % prefs.tz_offset
+		bar = quota.get_request_cpu_usage()
+		footer = "APPLICATION_ID=%s, CURRENT_VERSION_ID=%s, AUTH_DOMAIN=%s, SERVER_SOFTWARE=%s, begin=%s, end=%s" % (
+			os.environ['APPLICATION_ID'],
+			os.environ['CURRENT_VERSION_ID'],
+			os.environ['AUTH_DOMAIN'],
+			os.environ['SERVER_SOFTWARE'],
+			foo,
+			bar
+		)
 
 		self.response.headers['Content-Type'] = 'text/html'
-		self.response.out.write( '%s<hr><p>The time is: %s ...</p><hr>%s<hr>&copy;2011'
-			% ( navbar, str(time), tz_form ) )
+		self.response.out.write( '%s<hr><p>The time is: %s ...</p><hr>%s<hr>&copy;2011<hr>%s'
+			% ( navbar, str(time), tz_form, footer ) )
 
 application = webapp.WSGIApplication(
 		[('/', MainPage)],
