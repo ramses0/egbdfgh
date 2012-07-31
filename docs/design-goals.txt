@@ -1,41 +1,53 @@
+Online e-Bookshelf for guitar sheet music
+  - As a guitarist I have a bunch of sheet music books
+  - ...and copies of songs, some bound, some not
+  - I want to be able to add ISBN's of my books
+  - ...enter a song-list for the book
+  - ...upload scans of the inner pages of the book
+  - I want to be able to rate the songs in the book
+  - ...and make "virtual" books using songs from a variety of sources
+
+Bookshelf like Delicious Library / GoodReads
+  - Add by ISBN / title
+  - Allow entering metadata (song lists? cover image?)
+  - Share / re-use work if possible
+
+Able to "author" new books / collections
+  - No ISBN?
+  - Pull / link from existing books (symlinks?)
+  - Add new private songs / works
+  - Printable view (*.pdf => bound)
+  - Allow page flow control (this page intentionally blank)
+
 Music like Mutopia
-  - Support Lilypond format (eventually)
-  - Definitely support arbitrary PDF / *.txt / *.jpg upload
+  - Support arbitrary PDF / *.txt / *.jpg upload (maybe lilypond)
   - Public stuff should be high quality
   - Private uploads are less important
 
-Editable like Wikipedia
-  - Backed by Git
-  - Full version history
-  - Any user can edit (possible / probable have an anonymous edit pool)
-  - Registered user can "sponsor in" anonymous edits
+Comprehensive like Wikipedia
   - Steal bio's per composer from Wikipedia
   - Potentially host per-song information (like: http://www.geocities.com/zio_tom78/music.html )[below]
+  - Focus on venn-diagram of "songs" that are in "books"
 
 Discussion like Delcamp
-  - Simple discussion, but per song, per video, or in general
+  - Simple discussion, but per song, per video, per book, or in general
   - Good moderation / edit / banhammer stuff (to keep positive tone)
   - ...but sortable!
 
-Video upload like YouTube
-  - upload, transcode
-  - view online, view on ipod
-  - subscribe to rss per user, per song
-  - subscribe to itunes rss
+Video upload provided by YouTube / Vimeo
+  - allow linking of videos / urls to songs / sites
 
 Open like Linux
   - reproduceable software
   - debian packages (apt-get install *dependencies* the-software-master)
   - GIT storage of data + code
-  - Fall to OpenID for identity
+  - Fall to OpenID for identity (??)
 
-Scale like GAE / EC2
-  - mostly for videos... fetch, store, transcode, etc.
-  - probable working-set of origin data is one node (ie *.ly files)
-  - probable comments / videos / etc should scale wide
-  - comments => sharding
-  - videos => wide storage, wide compute (ffmpeg)
-  - ...or defer to youtube short / long term
+Easy to develop
+  - git clone git://egbdf.us/git
+  - cd egbdf
+  - ./develop.sh
+  - might require *.deb vm?
 
 RSS/Podcast/Vidcast to iTunes
   - subscribe to this user
